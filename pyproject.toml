@@ -1,0 +1,10 @@
+[project]
+name = "ades"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "agno>=2.3.21",
+    "ollama>=0.6.1",
+]

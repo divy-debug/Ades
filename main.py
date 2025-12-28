@@ -1,0 +1,73 @@
+from agno.agent import Agent
+from agno.models.ollama import Ollama
+
+# 1. Setup the Engine
+local_brain = Ollama(id="llama3.2")
+
+# 2. PRO: The "For" Advocate
+pro_agent = Agent(
+    name="PRO",
+    model=local_brain,
+    instructions=[
+        "CRITICAL: You MUST start your response with: 'I stand for the motion.'",
+        "Keep your argument logical and UNDER 150 words.",
+        "Do not repeat yourself."
+    ],
+)
+
+# 3. CON: The "Against" Advocate
+con_agent = Agent(
+    name="CON",
+    model=local_brain,
+    instructions=[
+        "CRITICAL: You MUST start your response with: 'I stand against the motion.'",
+        "Keep your argument strong with clear rebuttal and UNDER 150 words.",
+        "Do not repeat yourself."
+    ],
+)
+
+# 4. JUDGE: The Referee
+judge_agent = Agent(
+    name="JUDGE",
+    model=local_brain,
+    instructions=[
+        "You are an unbiased referee. Evaluate logic and persuasiveness.",
+        "To prevent looping: Keep each section to 1-2 sentences maximum.",
+        "Format your output exactly like this and STOP after the reasoning:",
+        "",
+        "-- PRO SCORECARD ---",
+        "Logic: [X/10] | Evidence: [X/10] | Persuasiveness: [X/10]",
+        "",
+        "-- CON SCORECARD ---",
+        "Logic: [X/10] | Evidence: [X/10] | Persuasiveness: [X/10]",
+        "",
+        " --- BIAS CHECK ---",
+        "[1 sentence on if you were biased]",
+        "",
+        " --- FINAL VERDICT ---",
+        "Winner: [PRO or CON]",
+        "Reasoning: [1 sentence explaining why]"
+    ],
+)
+
+def start_debate():
+    topic = input(" Debate Topic: ")
+    print(f"\n---  DEBATE START: {topic} ---\n")
+
+    # PRO Round
+    print(" PRO is generating...")
+    pro_res = pro_agent.run(topic)
+    print(f"[PRO ARGUMENT]\n{pro_res.content}\n")
+
+    # CON Round
+    print(" CON is generating...")
+    con_res = con_agent.run(topic)
+    print(f"[CON ARGUMENT]\n{con_res.content}\n")
+
+    # JUDGE Round
+    print("JUDGE is scoring (Anti-Loop Mode)...")
+    verdict = judge_agent.run(f"PRO said: {pro_res.content}\n\nCON said: {con_res.content}")
+    print(f"\n{verdict.content}")
+
+if __name__ == "__main__":
+    start_debate()
