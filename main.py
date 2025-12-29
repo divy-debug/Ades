@@ -24,13 +24,12 @@ con_agent = Agent(
         "Do not repeat yourself."
     ],
 )
-
 # 4. JUDGE: The Evaluation System
 judge_agent = Agent(
     name="JUDGE",
     model=local_brain,
     instructions=[
-        "You are an unbiased referee. Evaluate logic and persuasiveness.",
+        "Be an unbiased referee. Evaluate logic and persuasiveness.",
         "To prevent looping: Keep each section to 1-2 sentences maximum.",
         "Format your output exactly like this and STOP after the reasoning:",
         "",
