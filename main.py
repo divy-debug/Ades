@@ -1,7 +1,6 @@
 from agno.agent import Agent
 from agno.models.ollama import Ollama
 
-# 1. Setup the Engine
 local_brain = Ollama(id="llama3.2")
 
 # 2. PRO: The "For" Advocate
@@ -9,7 +8,7 @@ pro_agent = Agent(
     name="PRO",
     model=local_brain,
     instructions=[
-        "CRITICAL: You MUST start your response with: 'I stand for the motion.'",
+        "CRITICAL: You MUST start your response with: 'Today, I stand for the motion.'",
         "Keep your argument logical and UNDER 150 words.",
         "Do not repeat yourself."
     ],
@@ -20,13 +19,13 @@ con_agent = Agent(
     name="CON",
     model=local_brain,
     instructions=[
-        "CRITICAL: You MUST start your response with: 'I stand against the motion.'",
+        "CRITICAL: You MUST start your response with: 'Today, I stand against the motion.'",
         "Keep your argument strong with clear rebuttal and UNDER 150 words.",
         "Do not repeat yourself."
     ],
 )
 
-# 4. JUDGE: The Referee
+# 4. JUDGE: The Evaluation System
 judge_agent = Agent(
     name="JUDGE",
     model=local_brain,
@@ -51,7 +50,7 @@ judge_agent = Agent(
 )
 
 def start_debate():
-    topic = input(" Debate Topic: ")
+    topic = input(" Enter Debate Topic: ")
     print(f"\n---  DEBATE START: {topic} ---\n")
 
     # PRO Round
@@ -60,12 +59,12 @@ def start_debate():
     print(f"[PRO ARGUMENT]\n{pro_res.content}\n")
 
     # CON Round
-    print(" CON is generating...")
+    print(" CON is ready for rebuttal...")
     con_res = con_agent.run(topic)
     print(f"[CON ARGUMENT]\n{con_res.content}\n")
 
     # JUDGE Round
-    print("JUDGE is scoring (Anti-Loop Mode)...")
+    print("JUDGE is evaluating ...")
     verdict = judge_agent.run(f"PRO said: {pro_res.content}\n\nCON said: {con_res.content}")
     print(f"\n{verdict.content}")
 
