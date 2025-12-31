@@ -3,7 +3,7 @@ from agno.models.ollama import Ollama
 
 local_brain = Ollama(id="llama3.2")
 
-# 2. PRO: The "For" Advocate
+# PRO: The "For" Advocate
 pro_agent = Agent(
     name="PRO",
     model=local_brain,
@@ -14,7 +14,7 @@ pro_agent = Agent(
     ],
 )
 
-# 3. CON: The "Against" Advocate
+# CON: The "Against" Advocate
 con_agent = Agent(
     name="CON",
     model=local_brain,
@@ -24,7 +24,7 @@ con_agent = Agent(
         "Do not repeat yourself."
     ],
 )
-# 4. JUDGE: The Evaluation System
+# JUDGE: The Evaluation System
 judge_agent = Agent(
     name="JUDGE",
     model=local_brain,
